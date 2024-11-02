@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import foodService from "./FoodService";
 import { Food } from "./types/Food";
 import NavBar from "./NavBar";
@@ -28,7 +28,6 @@ export function Day() {
         <div className="inline-flex justify-center">
           {showSearch ? <SearchItem></SearchItem> : <CustomItem></CustomItem>}
         </div>
-        <Calender></Calender>
       </div>
     </>
   );
@@ -46,6 +45,7 @@ function SearchItem() {
       cal: 300,
     },
   ]);
+  const suggestionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!query) return;
@@ -64,8 +64,16 @@ function SearchItem() {
           onChange={(e) => setQuery(e.target.value)}
         />
         <div className="relative block">
-          <div className="absolute w-full">
-            {suggestions.map((suggest, index) => (<Suggestion food={suggest} key={index} />))}
+          <div
+            ref={suggestionRef}
+            className="absolute w-full"
+          >
+            {suggestions.map((suggest, index) => (
+              <Suggestion
+                food={suggest}
+                key={index}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -73,10 +81,12 @@ function SearchItem() {
   );
 }
 
-function Suggestion({food}: {food: Food}) {
+function Suggestion({ food }: { food: Food }) {
   return (
     <>
-      <div className="p-1 bg-lavender first:rounded-t-lg last:rounded-b-lg">
+      <div
+        className="p-1 bg-lavender first:rounded-t-lg last:rounded-b-lg"
+      >
         <span className="select-none">
           {food.name} ({food.cal})
         </span>
