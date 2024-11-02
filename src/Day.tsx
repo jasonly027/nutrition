@@ -58,28 +58,13 @@ export function Day() {
           {showSearch ? <SearchItem></SearchItem> : <CustomItem></CustomItem>}
         </div>
       </div>
-      <br></br>
-      {showSearch ? <SearchItem></SearchItem> : <CustomItem></CustomItem>}
-
-      <input value = {foodEntry} onChange={(ev => setFoodEntry(ev.target.value))} type="text" className="" placeholder="Food Name"/>
-      <input value = {calories} onChange={(ev) => setCalories(ev.target.value)} type="text" className="" placeholder="Calories"/>
-      <input className="justify-center font-bold text-white bg-blue-500 rounded-lg p-2 cursor-pointer" type="button" onClick={handleAddFood} value={'Add Food'}/>
     </>
   );
 }
 
 function SearchItem() {
   const [query, setQuery] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<Food[]>([
-    {
-      name: "banana",
-      cal: 123
-    },
-    {
-      name: "apple",
-      cal: 300
-    }
-  ]);
+  const [suggestions, setSuggestions] = useState<Food[]>([]);
   const suggestionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
