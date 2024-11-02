@@ -10,7 +10,7 @@ class FoodService {
     FoodService.instance = this;
   }
 
-  search = debounce(this.search_impl, 1000);
+  search = debounce(this.search_impl, 500);
 
   async search_impl(text: string, setSuggestions: React.Dispatch<React.SetStateAction<Food[]>>) {
     const url = "https://api.nal.usda.gov/fdc/v1/foods/search";
