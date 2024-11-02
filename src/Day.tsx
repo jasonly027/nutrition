@@ -4,9 +4,8 @@ import { Food } from "./types/Food";
 import NavBar from "./NavBar";
 import Calender from "./Calender";
 import { Auth } from "firebase/auth";
-import { getDatabase, ref, get, set, push} from "firebase/database";
+import { getDatabase, ref, get, set, push } from "firebase/database";
 import { auth } from "./Firebase";
-
 
 export function Day() {
   const [showSearch, setShowSearch] = useState<boolean>(true);
@@ -14,28 +13,31 @@ export function Day() {
   const [foodEntry, setFoodEntry] = useState("");
   const [calories, setCalories] = useState("");
 
-
   const handleAddFood = () => {
     const user = auth.currentUser; // Ensure user is authenticated
     if (user) {
-      console.log("authed")
+      console.log("authed");
       const db = getDatabase();
       const today = new Date();
-      const userRef = ref(db, `users/${user.uid}/${today.getMonth() +" "+ today.getDate()+ " "+ today.getFullYear()}/foodEntries`);
+      const userRef = ref(
+        db,
+        `users/${user.uid}/${
+          today.getMonth() + " " + today.getDate() + " " + today.getFullYear()
+        }/foodEntries`
+      );
       try {
-        const newPost = push(userRef)
+        const newPost = push(userRef);
         set(newPost, {
           name: foodEntry,
-          cal: calories
+          cal: calories,
         }).then();
-
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     } else {
-      console.log("no auth")
+      console.log("no auth");
     }
-  }
+  };
   return (
     <>
       <NavBar />
@@ -56,6 +58,28 @@ export function Day() {
         </div>
         <div className="inline-flex justify-center">
           {showSearch ? <SearchItem></SearchItem> : <CustomItem></CustomItem>}
+          <input
+            value={foodEntry}
+            onChange={(ev) => setFoodEntry(ev.target.value)}
+            type="text"
+            className=""
+            placeholder="Food Name"
+          />
+          <div>
+          <input
+            value={calories}
+            onChange={(ev) => setCalories(ev.target.value)}
+            type="text"
+            className=""
+            placeholder="Calories"
+          />
+          <input
+            className="justify-center font-bold text-white bg-blue-500 rounded-lg p-2 cursor-pointer"
+            type="button"
+            onClick={handleAddFood}
+            value={"Add Food"}
+          />
+          </div>
         </div>
       </div>
     </>
@@ -104,9 +128,7 @@ function SearchItem() {
 function Suggestion({ food }: { food: Food }) {
   return (
     <>
-      <div
-        className="p-1 bg-lavender first:rounded-t-lg last:rounded-b-lg"
-      >
+      <div className="p-1 bg-lavender first:rounded-t-lg last:rounded-b-lg">
         <span className="select-none">
           {food.name} ({food.cal})
         </span>
